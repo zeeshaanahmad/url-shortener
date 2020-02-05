@@ -18,7 +18,7 @@ This project depends on
 
 To build this project, run
 
-```
+```shell script
 git clone https://github.com/zeeshaanahmad/url-shortener.git
 cd url-shortener
 gradle clean build
@@ -32,7 +32,7 @@ Project build can be deployed using docker-compose.yml which sets up two contain
 
 To deploy the project, run
 
-```
+```shell script
 docker-compose up --build
 ```
 
@@ -82,6 +82,14 @@ Please note that API works only with valid HTTP or HTTPS Urls. In case of malfor
 
 This endpoint redirects to the corresponding fullUrl.
 
+## Undeploy
+
+To undeploy the containers, run
+
+```shell script
+docker-compose down
+```
+
 # Url Shortening Algorithm
 
 I thought of two approaches
@@ -91,4 +99,5 @@ I thought of two approaches
 Tested both of the approaches but in case of hashes, sometimes the hashes were longer than actual URL. Another issue was the readability and ease of remembering. So, I went with the second approach. With the Base conversion approach, even the maximum value of Long produces 10 characters which is still somewhat easy to remember. 
 > There is a dependency from Google named Guava that could be used here to generate hashes. Although murmur_3_32 hash implemented in Guava was generating up to 10 characters long string, I left it for future testing and evaluation.
 
-
+# Contributors
+email: ahmad.zeeshaan@gmail.com
