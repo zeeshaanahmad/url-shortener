@@ -82,3 +82,12 @@ Please note that API works only with valid HTTP or HTTPS Urls. In case of malfor
 
 This endpoint redirects to the corresponding fullUrl.
 
+# Url Shortening Algorithm
+
+I thought of two approaches
+1. Generating hashes for the fullUrl and storing them as key value pairs in redis cache or in mysql database
+2. Performing a Base62 conversion from Base10 on the id of stored fullUrl
+
+Tested both of the approaches but in case of hashes, sometimes the hashes were longer than actual URL. Another issue was the readability and ease of remembering. So, I went with the second approach. With the Base conversion approach, even the maximum value of Long produces 10 characters which is still somewhat easy to remember.
+
+
