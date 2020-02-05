@@ -111,6 +111,7 @@ Tested both of the approaches but in case of hashes, sometimes the hashes were l
 * Faced issues with auto schema generation through JPA, so delegated the schema creation to Docker container
 * Faced issues with api container not being able to get connection while mysql container was being set up, so added `?autoReconnect=true&failOverReadOnly=false&maxReconnects=10&useSSL=false` to datasource url in application.properties. It slows down the application startup. You may remove that part if you want.
 * Implement https
+* Mount volumes for MySql container to persist data outside of the container
 
 # Contributors
 email: ahmad.zeeshaan@gmail.com
