@@ -33,26 +33,42 @@ docker-compose up --build
 `api.Dockerfile` sets up an image to deploy the project's jar file generated above from `build/libs/url-shortener-0.0.1-SNAPSHOT.jar`. It exposes the API on port `8080`
 
 ### docker-compose.yml
-Provides the configuration for containers to host API and MySql.
+Provides the configuration for containers to host API and MySql. It sets up two services; `api-server` and `api-db` with container names `urlshortener-springboot` and `mysqlurldb` respectively. 
+The datasource url is being set in the `api-server` configuration so that it points to the MySql container.
+Both `api-server` and `api-db` are linked together through the `urlshortener-mysql-network` docker network. The network enables both the containers to communicate together.
 
-### Reference Documentation
-For further reference, please consider the following sections:
+## API Endpoints
 
-* [Official Gradle documentation](https://docs.gradle.org)
-* [Spring Boot Gradle Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/2.2.4.RELEASE/gradle-plugin/reference/html/)
-* [Spring Web](https://docs.spring.io/spring-boot/docs/2.2.4.RELEASE/reference/htmlsingle/#boot-features-developing-web-applications)
-* [Spring Data Redis (Access+Driver)](https://docs.spring.io/spring-boot/docs/2.2.4.RELEASE/reference/htmlsingle/#boot-features-redis)
+There are 2 API endpoints
 
-### Guides
-The following guides illustrate how to use some features concretely:
+### POST `/shorten`
+It takes a JSON object in the following format as payload
 
-* [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
-* [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
-* [Building REST services with Spring](https://spring.io/guides/tutorials/bookmarks/)
-* [Messaging with Redis](https://spring.io/guides/gs/messaging-redis/)
+```json
+{
+  "fullUrl":"<The URL to be shortened>"
+}
+```
 
-### Additional Links
-These additional references should also help you:
+Response:
 
-* [Gradle Build Scans – insights for your project's build](https://scans.gradle.com#gradle)
+```json
+{
+  "shortUrl": "<shortened url for the fullUrl provided in the request payload">
+}
+```
+
+Please note that API works only with valid HTTP or HTTPS Urls. In case of malformed Url, it returns `400 Bad Request` error with response body containing a JSON object in the following format
+
+```json
+{
+  "field":"fullUrl",
+  "value":"<Malformed Url provided in the request>",
+  "message":"<Exception message>"
+}
+```
+
+### GET `/<shortened_text>`
+
+This endpoint redirects to the corresponding fullUrl.
 
