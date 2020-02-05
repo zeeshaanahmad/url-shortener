@@ -82,6 +82,10 @@ Please note that API works only with valid HTTP or HTTPS Urls. In case of malfor
 
 This endpoint redirects to the corresponding fullUrl.
 
+### GET `/actuator/health`
+
+Included the spring boot actuator dependency for API metrics. You can try this endpoint for health checks.
+
 ## Undeploy
 
 To undeploy the containers, run
@@ -98,6 +102,12 @@ I thought of two approaches
 
 Tested both of the approaches but in case of hashes, sometimes the hashes were longer than actual URL. Another issue was the readability and ease of remembering. So, I went with the second approach. With the Base conversion approach, even the maximum value of Long produces 10 characters which is still somewhat easy to remember. 
 > There is a dependency from Google named Guava that could be used here to generate hashes. Although murmur_3_32 hash implemented in Guava was generating up to 10 characters long string, I left it for future testing and evaluation.
+
+# Future Enhancements / Known Issues
+* Since the project is for demo purpose only, Passwords are in plaintext. Will consider using Jasypt to encrypt the password in future
+* Haven't implemented Front-end application yet
+* Faced issues with auto schema generation through JPA, so delegated the schema creation to Docker container
+* Faced issues with api container not being able to get connection while mysql container was being set up, so added `?autoReconnect=true&failOverReadOnly=false&maxReconnects=10&useSSL=false` to datasource url in application.properties. It slows down the application startup. You may remove that part if you want.
 
 # Contributors
 email: ahmad.zeeshaan@gmail.com
