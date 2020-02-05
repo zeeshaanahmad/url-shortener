@@ -4,7 +4,7 @@ services:
     container_name: urlshortener-springboot
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: api.Dockerfile
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysqlurldb:3306/urldb
     ports:
