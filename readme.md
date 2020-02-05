@@ -1,10 +1,20 @@
 # URL Shortner
+
 Spring Boot based REST API that takes a URL and returns a shortened URL and uses MySQL to persist data.
 
 # Getting Started
 
-## Project Build 
+## Dependencies
 
+This project depends on 
+* spring-boot-starter-web (Spring boot framework)
+* spring-boot-starter-data-jpa (for data persistence)
+* spring-boot-starter-actuator (for API statistics)
+* commons-validator:1.6 (for URL validation)
+* h2 (for tests)
+* spring-boot-starter-test (for testss)
+
+## Project Build 
 
 To build this project, run
 
@@ -54,7 +64,7 @@ Response:
 
 ```json
 {
-  "shortUrl": "<shortened url for the fullUrl provided in the request payload">
+  "shortUrl": "<shortened url for the fullUrl provided in the request payload>"
 }
 ```
 
