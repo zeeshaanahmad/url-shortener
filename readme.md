@@ -36,6 +36,8 @@ To deploy the project, run
 docker-compose up --build
 ```
 
+**The application will be accessible on http://localhost:8080**
+
 ### db.Dockerfile
 `db.Dockerfile` builds the docker image for MySql using MySql version 8 as the base image. It uses `schema.sql` at startup to set up the database schema.
 
@@ -49,7 +51,7 @@ Both `api-server` and `api-db` are linked together through the `urlshortener-mys
 
 ## API Endpoints
 
-There are 2 API endpoints
+You can access following API endpoints at http://localhost:8080
 
 ### POST `/shorten`
 It takes a JSON object in the following format as payload
@@ -108,6 +110,7 @@ Tested both of the approaches but in case of hashes, sometimes the hashes were l
 * Haven't implemented Front-end application yet
 * Faced issues with auto schema generation through JPA, so delegated the schema creation to Docker container
 * Faced issues with api container not being able to get connection while mysql container was being set up, so added `?autoReconnect=true&failOverReadOnly=false&maxReconnects=10&useSSL=false` to datasource url in application.properties. It slows down the application startup. You may remove that part if you want.
+* Implement https
 
 # Contributors
 email: ahmad.zeeshaan@gmail.com
