@@ -21,8 +21,12 @@ import java.util.NoSuchElementException;
 @RestController
 public class UrlController {
 
+    protected final UrlService urlService;
+
     @Autowired
-    UrlService urlService;
+    public UrlController(UrlService urlService) {
+        this.urlService = urlService;
+    }
 
     /**
      * @param fullUrl Takes an object of FullUrl supplied in the request body

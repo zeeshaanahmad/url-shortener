@@ -11,8 +11,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class UrlService {
 
+    private final UrlRepository urlRepository;
+
     @Autowired
-    private UrlRepository urlRepository;
+    public UrlService(UrlRepository urlRepository) {
+        this.urlRepository = urlRepository;
+    }
 
     private UrlEntity get(Long id) {
         UrlEntity urlEntity = urlRepository.findById(id).get();
