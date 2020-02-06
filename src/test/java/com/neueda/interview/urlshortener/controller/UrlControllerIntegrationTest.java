@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.neueda.interview.urlshortener.dto.FullUrl;
 import com.neueda.interview.urlshortener.service.UrlService;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,45 @@ public class UrlControllerIntegrationTest {
                 .content(asJsonString(fullUrl)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.shortUrl", startsWith("http")));
+    }
+
+    @Test
+    public void shouldNotInsertFullUrlIfAlreadyExists() throws Exception {
+        FullUrl fullUrl = new FullUrl("https://example.com/foo");
+
+        String shortUrl1 = mvc.perform(post("/shorten")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(fullUrl)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.shortUrl", startsWith("http"))).andReturn().getResponse().getContentAsString();
+
+        String shortUrl2 = mvc.perform(post("/shorten")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(fullUrl)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.shortUrl", startsWith("http"))).andReturn().getResponse().getContentAsString();
+
+        Assert.assertEquals(shortUrl1, shortUrl2);
+    }
+
+    @Test
+    public void shouldNotInsertFullUrlIfDoesNotExist() throws Exception {
+        FullUrl fullUrl1 = new FullUrl("https://example.com/foo1");
+        FullUrl fullUrl2 = new FullUrl("https://example.com/foo2");
+
+        String shortUrl1 = mvc.perform(post("/shorten")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(fullUrl1)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.shortUrl", startsWith("http"))).andReturn().getResponse().getContentAsString();
+
+        String shortUrl2 = mvc.perform(post("/shorten")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(fullUrl2)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.shortUrl", startsWith("http"))).andReturn().getResponse().getContentAsString();
+
+        Assert.assertNotEquals(shortUrl1, shortUrl2);
     }
 
     public static String asJsonString(final Object obj) throws JsonProcessingException {
