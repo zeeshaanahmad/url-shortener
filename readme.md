@@ -62,6 +62,15 @@ It takes a JSON object in the following format as payload
 }
 ```
 
+#### cURL
+
+```shell script
+curl -X POST \
+  http://localhost:8080/shorten \
+  -H 'Content-Type: application/json' \
+  -d '{"fullUrl":"https://example.com/example/1"}'
+```
+
 Response:
 
 ```json
@@ -87,6 +96,12 @@ This endpoint redirects to the corresponding fullUrl.
 ### GET `/actuator/health`
 
 Included the spring boot actuator dependency for API metrics. You can try this endpoint for health checks.
+
+#### cURL
+
+```shell script
+curl -X GET   http://localhost:8080/actuator/health
+```
 
 ## Undeploy
 
