@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UrlService {
 
@@ -54,14 +56,37 @@ public class UrlService {
      * @return ShortUrl object
      */
     public ShortUrl getShortUrl(FullUrl fullUrl) {
-        logger.info(String.format("Saving Url %s to database", fullUrl.getFullUrl()));
-        UrlEntity savedUrl = this.save(fullUrl);
-        logger.debug(savedUrl.toString());
+
+        logger.info("Checking if the url already exists");
+        List<UrlEntity> savedUrls = null;
+        savedUrls = checkFullUrlAlreadyExists(fullUrl);
+
+        UrlEntity savedUrl = null;
+
+        if (savedUrls.isEmpty()) {
+            logger.info(String.format("Saving Url %s to database", fullUrl.getFullUrl()));
+            savedUrl = this.save(fullUrl);
+            logger.debug(savedUrl.toString());
+        }
+        else {
+            savedUrl = savedUrls.get(0);
+            logger.info(String.format("url: %s already exists in the database. skipped insert", savedUrl));
+        }
 
         logger.debug(String.format("Converting Base 10 %d to Base 62 string", savedUrl.getId()));
         String shortUrlText = ShorteningUtil.idToStr(savedUrl.getId());
         logger.info(String.format("Converted Base 10 %d to Base 62 string %s", savedUrl.getId(), shortUrlText));
 
         return new ShortUrl(shortUrlText);
+    }
+
+    /**
+     * Check if Url already exists in the database to prevent having same url stored multiple times
+     *
+     * @param fullUrl
+     * @return list of UrlEntity objects, list will be empty if no results found
+     */
+    private List<UrlEntity> checkFullUrlAlreadyExists(FullUrl fullUrl) {
+        return urlRepository.findUrlByFullUrl(fullUrl.getFullUrl());
     }
 }
